@@ -1,20 +1,28 @@
 package com.amazingnumbers.service;
 
+import java.math.BigInteger;
+
 public class NumberPropertyChecker {
 
-    public static boolean isEven(int number) {
-        return number % 2 == 0;
+    public static boolean isEven(BigInteger number) {
+        return number.mod(BigInteger.TWO).equals(BigInteger.ZERO);
     }
 
-    public static boolean isOdd(int number) {
-        return number % 2 != 0;
+    public static boolean isOdd(BigInteger number) {
+        return !number.mod(BigInteger.TWO).equals(BigInteger.ZERO);
     }
 
-    public static boolean isBuzz(int number) {
-        return number % 10 == 7 || number % 7 == 0;
+    public static boolean isBuzz(BigInteger number) {
+        return number.mod(BigInteger.TEN).equals(BigInteger.valueOf(7)) ||
+                number.mod(BigInteger.valueOf(7)).equals(BigInteger.ZERO);
     }
 
-    public static boolean isDuck(int number) {
-        return number > 0 && (number % 10 == 0 || isDuck(number / 10));
+    public static boolean isDuck(BigInteger number) {
+        return number.compareTo(BigInteger.ZERO) > 0 &&
+                (number.mod(BigInteger.TEN).equals(BigInteger.ZERO) || isDuck(number.divide(BigInteger.TEN)));
+    }
+
+    public static boolean isPalindromic(BigInteger number) {
+        return number.toString().equals(new StringBuilder(number.toString()).reverse().toString());
     }
 }
