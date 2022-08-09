@@ -1,34 +1,48 @@
 package com.amazingnumbers.service;
 
-import java.math.BigInteger;
 
 public class NumberPropertyChecker {
 
-    public static boolean isEven(BigInteger number) {
-        return number.mod(BigInteger.TWO).equals(BigInteger.ZERO);
+    public static boolean isEven(long number) {
+        return number % 2 == 0;
     }
 
-    public static boolean isOdd(BigInteger number) {
-        return !number.mod(BigInteger.TWO).equals(BigInteger.ZERO);
+    public static boolean isOdd(long number) {
+        return number % 2 != 0;
     }
 
-    public static boolean isBuzz(BigInteger number) {
-        return number.mod(BigInteger.TEN).equals(BigInteger.valueOf(7)) ||
-                number.mod(BigInteger.valueOf(7)).equals(BigInteger.ZERO);
+    public static boolean isBuzz(long number) {
+        return number % 10 == 7 ||
+                number % 7 == 0;
     }
 
-    public static boolean isDuck(BigInteger number) {
-        return number.compareTo(BigInteger.ZERO) > 0 &&
-                (number.mod(BigInteger.TEN).equals(BigInteger.ZERO) || isDuck(number.divide(BigInteger.TEN)));
+    public static boolean isDuck(long number) {
+        return number > 0 &&
+                (number % 10 == 0 || isDuck(number / 10));
     }
 
-    public static boolean isPalindromic(BigInteger number) {
-        return number.toString().equals(new StringBuilder(number.toString()).reverse().toString());
+    public static boolean isPalindromic(long number) {
+        return String.valueOf(number).equals(new StringBuilder(String.valueOf(number)).reverse().toString());
     }
 
-    public static boolean isGapful(BigInteger number) {
-        return number.toString().length() >= 3 && number.mod(new BigInteger(String.valueOf(number.toString().charAt(0)) +
-                String.valueOf(number.toString().charAt(number.toString().length() - 1)))
-        ).equals(BigInteger.ZERO);
+    public static boolean isGapful(long number) {
+        String numberString = String.valueOf(number);
+        return String.valueOf(number).length() >= 3 &&
+                number % (Long.parseLong(numberString.charAt(0) +
+                        String.valueOf(numberString.charAt(numberString.length() - 1)))
+                ) == 0;
+    }
+
+    public static boolean isSpy(long number) {
+        String numberString = String.valueOf(number);
+        Integer[] digits = new Integer[numberString.length()];
+        long sumDigits = 0;
+        long productDigits = 1;
+        for (int i = 0; i < digits.length; i++) {
+            digits[i] = Integer.parseInt(numberString.substring(i, i + 1));
+            sumDigits += digits[i];
+            productDigits *= digits[i];
+        }
+        return sumDigits == productDigits;
     }
 }
