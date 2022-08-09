@@ -35,13 +35,12 @@ public class NumberPropertyChecker {
 
     public static boolean isSpy(long number) {
         String numberString = String.valueOf(number);
-        Integer[] digits = new Integer[numberString.length()];
         long sumDigits = 0;
         long productDigits = 1;
-        for (int i = 0; i < digits.length; i++) {
-            digits[i] = Integer.parseInt(numberString.substring(i, i + 1));
-            sumDigits += digits[i];
-            productDigits *= digits[i];
+        for (int i = 0; i < numberString.length(); i++) {
+            int digit = numberString.charAt(i) - '0';
+            sumDigits += digit;
+            productDigits *= digit;
         }
         return sumDigits == productDigits;
     }
@@ -64,5 +63,24 @@ public class NumberPropertyChecker {
             }
         }
         return output;
+    }
+
+    public static boolean isHappy(long number) {
+        long result = checkHappyNumber(number);
+        while (result != 1 && result != 4) {
+            result = checkHappyNumber(result);
+        }
+        return result == 1;
+    }
+
+    private static long checkHappyNumber(long number) {
+        long sum = 0;
+        int digit;
+        String numberString = String.valueOf(number);
+        for (int i = 0; i < numberString.length(); i++) {
+            digit = numberString.charAt(i) - '0';
+            sum += (long) digit * digit;
+        }
+        return sum;
     }
 }

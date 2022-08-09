@@ -1,7 +1,6 @@
 package com.amazingnumbers.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class NumberProperties {
@@ -14,7 +13,8 @@ public class NumberProperties {
     public NumberProperties(long number) {
         this.number = number;
         this.properties = new ArrayList<>(
-                List.of(new Boolean[]{false, false, false, false, false, false, false, false, false, false}));
+                List.of(false, false, false, false, false, false,
+                        false, false, false, false, false, false));
         this.properties.set(0, NumberPropertyChecker.isEven(number));
         this.properties.set(1, NumberPropertyChecker.isOdd(number));
         this.properties.set(2, NumberPropertyChecker.isBuzz(number));
@@ -25,6 +25,8 @@ public class NumberProperties {
         this.properties.set(7, NumberPropertyChecker.isSquare(number));
         this.properties.set(8, NumberPropertyChecker.isSunny(number));
         this.properties.set(9, NumberPropertyChecker.isJumping(number));
+        this.properties.set(10, NumberPropertyChecker.isHappy(number));
+        this.properties.set(11, !this.properties.get(10));
     }
 
     public String toString() {
@@ -38,11 +40,13 @@ public class NumberProperties {
                 "         spy: %b\n".formatted(properties.get(6)) +
                 "      square: %b\n".formatted(properties.get(7)) +
                 "       sunny: %b\n".formatted(properties.get(8)) +
-                "     jumping: %b\n".formatted(properties.get(9));
+                "     jumping: %b\n".formatted(properties.get(9)) +
+                "       happy: %b\n".formatted(properties.get(10)) +
+                "         sad: %b\n".formatted(properties.get(11));
     }
 
     public String toShortString(String[] inputProperties) {
-        List<String> propertiesList = Arrays.asList(inputProperties);
+        List<String> propertiesList = new ArrayList<>(List.of(inputProperties));
         addPropertyToShortString(2, "buzz", propertiesList);
         addPropertyToShortString(3, "duck", propertiesList);
         addPropertyToShortString(4, "palindromic", propertiesList);
@@ -51,25 +55,30 @@ public class NumberProperties {
         addPropertyToShortString(7, "square", propertiesList);
         addPropertyToShortString(8, "sunny", propertiesList);
         addPropertyToShortString(9, "jumping", propertiesList);
+        addPropertyToShortString(10, "happy", propertiesList);
+        addPropertyToShortString(11, "sad", propertiesList);
         addPropertyToShortString(0, "even", propertiesList);
         addPropertyToShortString(1, "odd", propertiesList);
         String output = outputSB.toString();
         return inputProperties.length == 0 || counter == inputProperties.length ? output : "";
     }
 
-    private void addPropertyToShortString(int index, String property, List<String> inputPropertiesList) {
-        if (properties.get(index)) {
+    private void addPropertyToShortString(int propertyIndex, String propertyName, List<String> requestPropertiesList) {
+        if (properties.get(propertyIndex)) {
             if (!firstTrue) {
                 outputSB.append(", ");
             } else {
                 outputSB.append(number);
                 outputSB.append(" is ");
             }
-            outputSB.append(property.toLowerCase());
-            if (inputPropertiesList.contains(property.toUpperCase())) {
+            outputSB.append(propertyName.toLowerCase());
+            if (requestPropertiesList.contains(propertyName.toUpperCase())) {
                 counter++;
             }
             firstTrue = false;
+        } else if (requestPropertiesList.contains("-" + propertyName.toUpperCase())) {
+            counter++;
         }
+        requestPropertiesList.remove(propertyName.toUpperCase());
     }
 }
