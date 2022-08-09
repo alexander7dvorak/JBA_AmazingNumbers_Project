@@ -43,15 +43,15 @@ public class AmazingNumbers {
         final int numberOfTokens = st.countTokens();
         int secondInputNumber;
         try {
-            if (numberOfTokens == 2) {
-                inputNumber = Long.parseLong(st.nextToken());
-                secondInputNumber = Integer.parseInt(st.nextToken());
-                printInfo(inputNumber, secondInputNumber, new String[]{});
+            if (numberOfTokens == 0) {
+                System.out.println("The first parameter should be a natural number or zero.");
             } else if (numberOfTokens == 1) {
                 inputNumber = Long.parseLong(st.nextToken());
                 printInfo(inputNumber);
-            } else if (numberOfTokens == 0) {
-                System.out.println("The first parameter should be a natural number or zero.");
+            } else if (numberOfTokens == 2) {
+                inputNumber = Long.parseLong(st.nextToken());
+                secondInputNumber = Integer.parseInt(st.nextToken());
+                printInfo(inputNumber, secondInputNumber, new String[]{});
             } else {
                 inputNumber = Long.parseLong(st.nextToken());
                 secondInputNumber = Integer.parseInt(st.nextToken());
@@ -60,22 +60,7 @@ public class AmazingNumbers {
                 while (st.hasMoreElements()) {
                     properties[counter++] = st.nextToken().toUpperCase();
                 }
-                List<String> propertiesList = List.of(properties);
-                if (propertiesList.contains("ODD") && propertiesList.contains("EVEN")) {
-                    System.out.println("The request contains mutually exclusive properties: [ODD, EVEN]");
-                    System.out.println("There are no numbers with these properties.");
-                    return;
-                } else if (propertiesList.contains("DUCK") && propertiesList.contains("SPY")) {
-                    System.out.println("The request contains mutually exclusive properties: [DUCK, SPY]");
-                    System.out.println("There are no numbers with these properties.");
-                    return;
-                } else if (propertiesList.contains("SUNNY") && propertiesList.contains("SQUARE")) {
-                    System.out.println("The request contains mutually exclusive properties: [SUNNY, SQUARE]");
-                    System.out.println("There are no numbers with these properties.");
-                    return;
-                } else {
-                    printInfo(inputNumber, secondInputNumber, properties);
-                }
+                printInfo(inputNumber, secondInputNumber, properties);
             }
         } catch (NumberFormatException e) {
             System.out.println("First and second parameters should be natural numbers or zeros.");
@@ -95,37 +80,7 @@ public class AmazingNumbers {
     }
 
     private static void printInfo(long number, int n, String[] properties) {
-        List<String> wrongProperties = new ArrayList<>();
-        for (String property : properties) {
-            switch (property) {
-                case "SPY":
-                case "GAPFUL":
-                case "PALINDROMIC":
-                case "DUCK":
-                case "BUZZ":
-                case "ODD":
-                case "EVEN":
-                case "SQUARE":
-                case "SUNNY":
-                    break;
-                default:
-                    wrongProperties.add(property);
-            }
-        }
-        if (wrongProperties.size() > 1) {
-            System.out.print("The properties [");
-            System.out.print(wrongProperties.get(0));
-            for (int i = 1; i < wrongProperties.size(); i++) {
-                System.out.print(", " + wrongProperties.get(i));
-            }
-            System.out.println("] are wrong.");
-            System.out.println("Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY]");
-            System.out.println();
-            return;
-        } else if (wrongProperties.size() == 1) {
-            System.out.println("The property [" + wrongProperties.get(0) + "] is wrong.");
-            System.out.println("Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY]");
-            System.out.println();
+        if (abortDueToWrongProperties(properties) || abortDueToMutuallyExclusiveProperties(properties)) {
             return;
         }
         if (n < 1) {
@@ -147,5 +102,65 @@ public class AmazingNumbers {
             }
         }
         System.out.println();
+    }
+
+    private static boolean abortDueToWrongProperties(String[] properties) {
+        List<String> wrongProperties = new ArrayList<>();
+        addWrongProperties(properties, wrongProperties);
+        if (wrongProperties.size() > 1) {
+            System.out.print("The properties [");
+            System.out.print(wrongProperties.get(0));
+            for (int i = 1; i < wrongProperties.size(); i++) {
+                System.out.print(", " + wrongProperties.get(i));
+            }
+            System.out.println("] are wrong.");
+            System.out.println("Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING]");
+            System.out.println();
+            return true;
+        } else if (wrongProperties.size() == 1) {
+            System.out.println("The property [" + wrongProperties.get(0) + "] is wrong.");
+            System.out.println("Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING]");
+            System.out.println();
+            return true;
+        }
+        return false;
+    }
+
+    private static void addWrongProperties(String[] properties, List<String> wrongProperties) {
+        for (String property : properties) {
+            switch (property) {
+                case "SPY":
+                case "GAPFUL":
+                case "PALINDROMIC":
+                case "DUCK":
+                case "BUZZ":
+                case "ODD":
+                case "EVEN":
+                case "SQUARE":
+                case "SUNNY":
+                case "JUMPING":
+                    break;
+                default:
+                    wrongProperties.add(property);
+            }
+        }
+    }
+
+    private static boolean abortDueToMutuallyExclusiveProperties(String[] properties) {
+        List<String> propertiesList = List.of(properties);
+        if (propertiesList.contains("ODD") && propertiesList.contains("EVEN")) {
+            System.out.println("The request contains mutually exclusive properties: [ODD, EVEN]");
+            System.out.println("There are no numbers with these properties.");
+            return true;
+        } else if (propertiesList.contains("DUCK") && propertiesList.contains("SPY")) {
+            System.out.println("The request contains mutually exclusive properties: [DUCK, SPY]");
+            System.out.println("There are no numbers with these properties.");
+            return true;
+        } else if (propertiesList.contains("SUNNY") && propertiesList.contains("SQUARE")) {
+            System.out.println("The request contains mutually exclusive properties: [SUNNY, SQUARE]");
+            System.out.println("There are no numbers with these properties.");
+            return true;
+        }
+        return false;
     }
 }

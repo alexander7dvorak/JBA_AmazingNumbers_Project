@@ -53,4 +53,16 @@ public class NumberPropertyChecker {
     public static boolean isSunny(long number) {
         return Math.sqrt(number + 1) % 1 == 0;
     }
+
+    public static boolean isJumping(long number) {
+        boolean output = true;
+        String numberString = String.valueOf(number);
+        for (int i = 1; i < numberString.length(); i++) {
+            if (Math.abs((int) (numberString.charAt(i - 1)) - (int) (numberString.charAt(i))) != 1) {
+                output = false;
+                break;
+            }
+        }
+        return output;
+    }
 }
