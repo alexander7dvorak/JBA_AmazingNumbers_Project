@@ -25,4 +25,10 @@ public class NumberPropertyChecker {
     public static boolean isPalindromic(BigInteger number) {
         return number.toString().equals(new StringBuilder(number.toString()).reverse().toString());
     }
+
+    public static boolean isGapful(BigInteger number) {
+        return number.toString().length() >= 3 && number.mod(new BigInteger(String.valueOf(number.toString().charAt(0)) +
+                String.valueOf(number.toString().charAt(number.toString().length() - 1)))
+        ).equals(BigInteger.ZERO);
+    }
 }
