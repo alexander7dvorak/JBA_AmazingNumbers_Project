@@ -45,4 +45,12 @@ public class NumberPropertyChecker {
         }
         return sumDigits == productDigits;
     }
+
+    public static boolean isSquare(long number) {
+        return Math.sqrt(number) % 1 == 0;
+    }
+
+    public static boolean isSunny(long number) {
+        return Math.sqrt(number + 1) % 1 == 0;
+    }
 }

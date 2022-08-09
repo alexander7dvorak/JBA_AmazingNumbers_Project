@@ -10,7 +10,8 @@ public class NumberProperties {
 
     public NumberProperties(long number) {
         this.number = number;
-        this.properties = new ArrayList<>(List.of(new Boolean[]{false, false, false, false, false, false, false}));
+        this.properties = new ArrayList<>(
+                List.of(new Boolean[]{false, false, false, false, false, false, false, false, false}));
         this.properties.set(0, NumberPropertyChecker.isEven(number));
         this.properties.set(1, NumberPropertyChecker.isOdd(number));
         this.properties.set(2, NumberPropertyChecker.isBuzz(number));
@@ -18,6 +19,8 @@ public class NumberProperties {
         this.properties.set(4, NumberPropertyChecker.isPalindromic(number));
         this.properties.set(5, NumberPropertyChecker.isGapful(number));
         this.properties.set(6, NumberPropertyChecker.isSpy(number));
+        this.properties.set(7, NumberPropertyChecker.isSquare(number));
+        this.properties.set(8, NumberPropertyChecker.isSunny(number));
     }
 
     public String toString() {
@@ -28,7 +31,9 @@ public class NumberProperties {
                 "        duck: %b\n".formatted(properties.get(3)) +
                 " palindromic: %b\n".formatted(properties.get(4)) +
                 "      gapful: %b\n".formatted(properties.get(5)) +
-                "         spy: %b\n".formatted(properties.get(6));
+                "         spy: %b\n".formatted(properties.get(6)) +
+                "      square: %b\n".formatted(properties.get(7)) +
+                "       sunny: %b\n".formatted(properties.get(8));
     }
 
     public String toShortString(String[] inputProperties) {
@@ -93,6 +98,32 @@ public class NumberProperties {
             }
             outputSB.append("spy");
             if (propertiesList.contains("SPY")) {
+                counter++;
+            }
+            firstTrue = false;
+        }
+        if (properties.get(7)) {
+            if (!firstTrue) {
+                outputSB.append(", ");
+            } else {
+                outputSB.append(number);
+                outputSB.append(" is ");
+            }
+            outputSB.append("square");
+            if (propertiesList.contains("SQUARE")) {
+                counter++;
+            }
+            firstTrue = false;
+        }
+        if (properties.get(8)) {
+            if (!firstTrue) {
+                outputSB.append(", ");
+            } else {
+                outputSB.append(number);
+                outputSB.append(" is ");
+            }
+            outputSB.append("sunny");
+            if (propertiesList.contains("SUNNY")) {
                 counter++;
             }
             firstTrue = false;
