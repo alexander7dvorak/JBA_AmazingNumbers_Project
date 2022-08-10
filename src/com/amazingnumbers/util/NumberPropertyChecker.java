@@ -1,4 +1,4 @@
-package com.amazingnumbers.service;
+package com.amazingnumbers.util;
 
 
 public class NumberPropertyChecker {

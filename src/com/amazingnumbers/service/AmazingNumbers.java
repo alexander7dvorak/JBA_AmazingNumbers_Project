@@ -1,9 +1,16 @@
 package com.amazingnumbers.service;
 
+import com.amazingnumbers.model.NumberProperties;
+import com.amazingnumbers.model.Property;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 
 @Service
 public class AmazingNumbers {
@@ -112,12 +119,12 @@ public class AmazingNumbers {
                 System.out.print(", " + wrongProperties.get(i));
             }
             System.out.println("] are wrong.");
-            System.out.println("Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING, HAPPY, SAD]");
+            System.out.printf("Available properties: %s\n", Arrays.toString(Property.values()));
             System.out.println();
             return true;
         } else if (wrongProperties.size() == 1) {
             System.out.println("The property [" + wrongProperties.get(0) + "] is wrong.");
-            System.out.println("Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING, HAPPY, SAD]");
+            System.out.printf("Available properties: %s\n", Arrays.toString(Property.values()));
             System.out.println();
             return true;
         }
