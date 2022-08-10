@@ -49,6 +49,7 @@ public class AmazingNumbers {
         try {
             if (numberOfTokens == 0) {
                 System.out.println("The first parameter should be a natural number or zero.");
+                System.out.println();
             } else if (numberOfTokens == 1) {
                 inputNumber = Long.parseLong(st.nextToken());
                 printInfo(inputNumber);
@@ -69,8 +70,8 @@ public class AmazingNumbers {
             }
         } catch (NumberFormatException e) {
             System.out.println("First and second parameters should be natural numbers or zeros.");
+            System.out.println();
         }
-        System.out.println();
     }
 
     private static void printInfo(long number) {
@@ -78,10 +79,10 @@ public class AmazingNumbers {
             System.out.println("Goodbye!");
         } else if (number < 0) {
             System.out.println("The first parameter should be a natural number or zero.");
+            System.out.println();
         } else {
             System.out.println(new NumberProperties(number));
         }
-        System.out.println();
     }
 
     private static void printInfo(long number, int n, String[] properties) {
@@ -95,6 +96,7 @@ public class AmazingNumbers {
                 System.out.println("Goodbye!");
             } else if (number < 0) {
                 System.out.println("The first parameter should be a natural number or zero.");
+                System.out.println();
             } else {
                 System.out.println();
                 for (long i = number, j = number; i < number + n; j++) {
@@ -170,7 +172,7 @@ public class AmazingNumbers {
         for (String s : propertiesList) {
             if (s.startsWith("-")) {
                 if (propertiesList.contains(s.substring(1))) {
-                    System.out.printf("The request contains mutually exclusive properties: [%s, -%s]\n", s, s);
+                    System.out.printf("The request contains mutually exclusive properties: [%s, %s]\n", s.substring(1), s);
                     return true;
                 }
             }

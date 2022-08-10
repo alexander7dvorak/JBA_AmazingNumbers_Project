@@ -7,10 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class NumberProperties {
-    private final HashMap<String, Boolean> properties = new HashMap<>();
     private final long number;
+    private final HashMap<String, Boolean> properties = new HashMap<>();
+    private static final int NUMBER_OF_SPACES = 12;
+    private StringBuilder outputSB;
     private boolean firstTrue = true;
-    private final StringBuilder outputSB = new StringBuilder();
     private int counter = 0;
 
     public NumberProperties(long number) {
@@ -30,22 +31,22 @@ public class NumberProperties {
     }
 
     public String toString() {
-        return "Properties of %d\n".formatted(number) +
-                "        even: %b\n".formatted(properties.get(Property.EVEN.toString())) +
-                "         odd: %b\n".formatted(properties.get(Property.ODD.toString())) +
-                "        buzz: %b\n".formatted(properties.get(Property.BUZZ.toString())) +
-                "        duck: %b\n".formatted(properties.get(Property.DUCK.toString())) +
-                " palindromic: %b\n".formatted(properties.get(Property.PALINDROMIC.toString())) +
-                "      gapful: %b\n".formatted(properties.get(Property.GAPFUL.toString())) +
-                "         spy: %b\n".formatted(properties.get(Property.SPY.toString())) +
-                "      square: %b\n".formatted(properties.get(Property.SQUARE.toString())) +
-                "       sunny: %b\n".formatted(properties.get(Property.SUNNY.toString())) +
-                "     jumping: %b\n".formatted(properties.get(Property.JUMPING.toString())) +
-                "       happy: %b\n".formatted(properties.get(Property.HAPPY.toString())) +
-                "         sad: %b\n".formatted(properties.get(Property.SAD.toString()));
+        outputSB = new StringBuilder();
+        outputSB.append("Properties of %d\n".formatted(number));
+        for (String propertyName : properties.keySet()) {
+            outputSB.append(createNSpacesString(NUMBER_OF_SPACES - propertyName.length()));
+            outputSB.append(propertyName.toLowerCase());
+            outputSB.append(": %b\n".formatted(properties.get(propertyName)));
+        }
+        return outputSB.toString();
+    }
+
+    private String createNSpacesString(int n) {
+        return " ".repeat(Math.max(0, n));
     }
 
     public String toShortString(String[] requestProperties) {
+        outputSB = new StringBuilder();
         for (String propertyName : properties.keySet()) {
             addPropertyToShortString(propertyName, Arrays.asList(requestProperties));
         }
@@ -60,14 +61,13 @@ public class NumberProperties {
                 outputSB.append(number);
                 outputSB.append(" is ");
             }
+            firstTrue = false;
             outputSB.append(propertyName.toLowerCase());
             if (requestPropertiesList.contains(propertyName.toUpperCase())) {
                 counter++;
             }
-            firstTrue = false;
         } else if (requestPropertiesList.contains("-" + propertyName.toUpperCase())) {
             counter++;
         }
-        requestPropertiesList.remove(propertyName.toUpperCase());
     }
 }
