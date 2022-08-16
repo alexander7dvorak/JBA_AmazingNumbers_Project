@@ -171,13 +171,6 @@ public class AmazingNumbers {
                 isMutuallyExclusiveProperties(true, propertiesSet);
     }
 
-    private static boolean isMutuallyExclusiveProperties(boolean minus, HashSet<String> propertiesSet) {
-        return isMutuallyExclusiveProperties(minus, Property.ODD.name(), Property.EVEN.name(), propertiesSet)
-                || isMutuallyExclusiveProperties(minus, Property.DUCK.name(), Property.SPY.name(), propertiesSet)
-                || isMutuallyExclusiveProperties(minus, Property.SUNNY.name(), Property.SQUARE.name(), propertiesSet)
-                || isMutuallyExclusiveProperties(minus, Property.HAPPY.name(), Property.SAD.name(), propertiesSet);
-    }
-
     private static boolean isMutuallyExclusiveProperties(boolean minus, String propertyA, String propertyB, HashSet<String> propertiesSet) {
         String minusString = minus ? "-" : "";
         if (propertiesSet.contains("%s%s".formatted(minusString, propertyA.toUpperCase()))
@@ -188,5 +181,12 @@ public class AmazingNumbers {
         } else {
             return false;
         }
+    }
+
+    private static boolean isMutuallyExclusiveProperties(boolean minus, HashSet<String> propertiesSet) {
+        return isMutuallyExclusiveProperties(minus, Property.ODD.name(), Property.EVEN.name(), propertiesSet)
+                || isMutuallyExclusiveProperties(minus, Property.DUCK.name(), Property.SPY.name(), propertiesSet)
+                || isMutuallyExclusiveProperties(minus, Property.SUNNY.name(), Property.SQUARE.name(), propertiesSet)
+                || isMutuallyExclusiveProperties(minus, Property.HAPPY.name(), Property.SAD.name(), propertiesSet);
     }
 }
