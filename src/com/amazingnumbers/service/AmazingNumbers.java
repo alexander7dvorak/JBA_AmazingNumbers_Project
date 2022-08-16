@@ -51,33 +51,45 @@ public class AmazingNumbers {
     private static void processUserPrompt(String input) {
         StringTokenizer st = new StringTokenizer(input, " ");
         final int numberOfTokens = st.countTokens();
-        long secondInputNumber;
         try {
             if (numberOfTokens == 0) {
                 Stopper.printWrongFirstParameter();
             } else if (numberOfTokens == 1) {
-                firstInputNumber = Long.parseLong(st.nextToken());
-                printInfo(firstInputNumber);
+                processSingleTokenUserPrompt(st);
             } else if (numberOfTokens == 2) {
-                firstInputNumber = Long.parseLong(st.nextToken());
-                secondInputNumber = Integer.parseInt(st.nextToken());
-                printInfo(firstInputNumber, secondInputNumber, new String[]{});
+                processTwoTokensUserPrompt(st);
             } else {
-                firstInputNumber = Long.parseLong(st.nextToken());
-                secondInputNumber = Integer.parseInt(st.nextToken());
-                String[] properties = new String[numberOfTokens - 2];
-                int counter = 0;
-                while (st.hasMoreElements()) {
-                    properties[counter++] = st.nextToken().toUpperCase();
-                }
-                properties = new HashSet<>(Arrays.asList(properties)).toArray(new String[0]);
-                printInfo(firstInputNumber, secondInputNumber, properties);
+                processMultipleTokensUserPrompt(st, numberOfTokens);
             }
         } catch (NumberFormatException e) {
             Stopper.printWrongRequestFormat();
         }
         System.out.println();
     }
+
+    private static void processSingleTokenUserPrompt(StringTokenizer st) {
+        firstInputNumber = Long.parseLong(st.nextToken());
+        printInfo(firstInputNumber);
+    }
+
+    private static void processTwoTokensUserPrompt(StringTokenizer st) {
+        firstInputNumber = Long.parseLong(st.nextToken());
+        long secondInputNumber = Integer.parseInt(st.nextToken());
+        printInfo(firstInputNumber, secondInputNumber, new String[]{});
+    }
+
+    private static void processMultipleTokensUserPrompt(StringTokenizer st, final int numberOfTokens) {
+        firstInputNumber = Long.parseLong(st.nextToken());
+        long secondInputNumber = Integer.parseInt(st.nextToken());
+        String[] properties = new String[numberOfTokens - 2];
+        int counter = 0;
+        while (st.hasMoreElements()) {
+            properties[counter++] = st.nextToken().toUpperCase();
+        }
+        properties = new HashSet<>(Arrays.asList(properties)).toArray(new String[0]);
+        printInfo(firstInputNumber, secondInputNumber, properties);
+    }
+
 
     private static void printInfo(long number) {
         if (number == 0) {
@@ -102,13 +114,17 @@ public class AmazingNumbers {
             } else if (firstNumber < 0) {
                 Stopper.printWrongFirstParameter();
             } else {
-                for (long i = firstNumber, j = firstNumber; i < firstNumber + secondNumber; j++) {
-                    String output = new NumberProperties(j).toShortString(properties);
-                    if (output.length() > 0) {
-                        System.out.println(output);
-                        i++;
-                    }
-                }
+                printEligibleNumbers(firstNumber, secondNumber, properties);
+            }
+        }
+    }
+
+    private static void printEligibleNumbers(long firstNumber, long secondNumber, String[] properties) {
+        for (long i = firstNumber, j = firstNumber; i < firstNumber + secondNumber; j++) {
+            String output = new NumberProperties(j).toShortString(properties);
+            if (output.length() > 0) {
+                System.out.println(output);
+                i++;
             }
         }
     }
