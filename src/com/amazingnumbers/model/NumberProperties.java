@@ -73,8 +73,8 @@ public class NumberProperties {
             } else {
                 outputBuilderShort.append(number);
                 outputBuilderShort.append(" is ");
+                firstTrueProperty = false;
             }
-            firstTrueProperty = false;
             outputBuilderShort.append(propertyName.toLowerCase());
             if (requestPropertiesSet.contains(propertyName.toUpperCase())) {
                 counter++;
