@@ -1,6 +1,6 @@
 package com.amazingnumbers.service;
 
-import com.amazingnumbers.model.NumberProperties;
+import com.amazingnumbers.util.NumberPropertyPrinter;
 import com.amazingnumbers.util.Stopper;
 import org.springframework.stereotype.Service;
 
@@ -69,13 +69,13 @@ public class AmazingNumbers {
 
     private static void processSingleTokenUserPrompt(StringTokenizer st) {
         firstInputNumber = Long.parseLong(st.nextToken());
-        printInfo(firstInputNumber);
+        NumberPropertyPrinter.printInfo(firstInputNumber);
     }
 
     private static void processTwoTokensUserPrompt(StringTokenizer st) {
         firstInputNumber = Long.parseLong(st.nextToken());
         long secondInputNumber = Integer.parseInt(st.nextToken());
-        printInfo(firstInputNumber, secondInputNumber, new String[]{});
+        NumberPropertyPrinter.printInfo(firstInputNumber, secondInputNumber, new String[]{});
     }
 
     private static void processMultipleTokensUserPrompt(StringTokenizer st, final int numberOfTokens) {
@@ -87,45 +87,6 @@ public class AmazingNumbers {
             properties[counter++] = st.nextToken().toUpperCase();
         }
         properties = new HashSet<>(Arrays.asList(properties)).toArray(new String[0]);
-        printInfo(firstInputNumber, secondInputNumber, properties);
-    }
-
-
-    private static void printInfo(long number) {
-        if (number == 0) {
-            Stopper.printGoodbye();
-        } else if (number < 0) {
-            Stopper.printWrongFirstParameter();
-        } else {
-            System.out.println(new NumberProperties(number));
-        }
-    }
-
-    private static void printInfo(long firstNumber, long secondNumber, String[] properties) {
-        if (Stopper.isStop(properties)) {
-            return;
-        }
-
-        if (secondNumber < 1) {
-            Stopper.printWrongSecondParameter();
-        } else {
-            if (firstNumber == 0) {
-                Stopper.printGoodbye();
-            } else if (firstNumber < 0) {
-                Stopper.printWrongFirstParameter();
-            } else {
-                printEligibleNumbers(firstNumber, secondNumber, properties);
-            }
-        }
-    }
-
-    private static void printEligibleNumbers(long firstNumber, long secondNumber, String[] properties) {
-        for (long i = firstNumber, j = firstNumber; i < firstNumber + secondNumber; j++) {
-            String output = new NumberProperties(j).toShortString(properties);
-            if (output.length() > 0) {
-                System.out.println(output);
-                i++;
-            }
-        }
+        NumberPropertyPrinter.printInfo(firstInputNumber, secondInputNumber, properties);
     }
 }
