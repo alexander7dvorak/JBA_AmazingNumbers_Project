@@ -47,10 +47,10 @@ public class AmazingNumbers {
         System.out.print("Enter a request: ");
         String input = scanner.nextLine();
         System.out.println();
-        printUserPrompt(input);
+        processUserPrompt(input);
     }
 
-    private static void printUserPrompt(String input) {
+    private static void processUserPrompt(String input) {
         StringTokenizer st = new StringTokenizer(input, " ");
         final int numberOfTokens = st.countTokens();
         int secondInputNumber;
