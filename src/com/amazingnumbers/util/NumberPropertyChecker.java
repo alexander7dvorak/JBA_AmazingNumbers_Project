@@ -1,6 +1,5 @@
 package com.amazingnumbers.util;
 
-
 public class NumberPropertyChecker {
 
     public static boolean isEven(long number) {
@@ -27,10 +26,10 @@ public class NumberPropertyChecker {
 
     public static boolean isGapful(long number) {
         String numberString = String.valueOf(number);
-        return String.valueOf(number).length() >= 3 &&
-                number % (Long.parseLong(numberString.charAt(0) +
-                        String.valueOf(numberString.charAt(numberString.length() - 1)))
-                ) == 0;
+        long firstDigitAndLastDigitConcat = Long.parseLong(
+                numberString.charAt(0) + String.valueOf(numberString.charAt(numberString.length() - 1)));
+        return String.valueOf(number).length() >= 3
+                && number % (firstDigitAndLastDigitConcat) == 0;
     }
 
     public static boolean isSpy(long number) {
@@ -54,15 +53,13 @@ public class NumberPropertyChecker {
     }
 
     public static boolean isJumping(long number) {
-        boolean output = true;
         String numberString = String.valueOf(number);
         for (int i = 1; i < numberString.length(); i++) {
             if (Math.abs((int) (numberString.charAt(i - 1)) - (int) (numberString.charAt(i))) != 1) {
-                output = false;
-                break;
+                return false;
             }
         }
-        return output;
+        return true;
     }
 
     public static boolean isHappy(long number) {
