@@ -12,7 +12,7 @@ public class NumberProperties {
 
     private StringBuilder outputBuilderShort;
     private StringBuilder outputBuilderLong;
-    private boolean firstTrue = true;
+    private boolean firstTrueProperty = true;
     private int counter = 0;
 
     public NumberProperties(long number) {
@@ -67,13 +67,13 @@ public class NumberProperties {
 
     private void addPropertyToShortString(String propertyName, Set<String> requestPropertiesSet) {
         if (properties.get(propertyName)) {
-            if (!firstTrue) {
+            if (!firstTrueProperty) {
                 outputBuilderShort.append(", ");
             } else {
                 outputBuilderShort.append(number);
                 outputBuilderShort.append(" is ");
             }
-            firstTrue = false;
+            firstTrueProperty = false;
             outputBuilderShort.append(propertyName.toLowerCase());
             if (requestPropertiesSet.contains(propertyName.toUpperCase())) {
                 counter++;
