@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class NumberProperties {
     private static final int NUMBER_OF_SPACES = 12;
+    private static final String EMPTY_STRING = "";
     private final long number;
     private final HashMap<String, Boolean> properties = new HashMap<>();
 
@@ -54,7 +55,7 @@ public class NumberProperties {
         }
         return requestProperties.length == 0 || counter == requestProperties.length ?
                 outputBuilderShort.toString() :
-                "";
+                EMPTY_STRING;
     }
 
     private void fillOutputBuilder(String[] requestProperties) {
