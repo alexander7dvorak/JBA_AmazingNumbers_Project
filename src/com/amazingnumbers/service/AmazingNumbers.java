@@ -47,6 +47,7 @@ public class AmazingNumbers {
         System.out.print("Enter a request: ");
         String input = scanner.nextLine();
         System.out.println();
+
         processUserPrompt(input);
     }
 
@@ -162,36 +163,26 @@ public class AmazingNumbers {
         HashSet<String> propertiesSet = new HashSet<>(List.of(properties));
         for (String s : propertiesSet) {
             if (s.startsWith("-")
-                    && isMutuallyExclusiveProperties(s.substring(1), s, propertiesSet)) {
+                    && isMutuallyExclusiveProperties(false, s.substring(1), s, propertiesSet)) {
                 return true;
             }
         }
-        return isMutuallyExclusiveProperties("", propertiesSet) ||
-                isMutuallyExclusiveProperties("-", propertiesSet);
+        return isMutuallyExclusiveProperties(false, propertiesSet) ||
+                isMutuallyExclusiveProperties(true, propertiesSet);
     }
 
-    private static boolean isMutuallyExclusiveProperties(String propertyA, String propertyB, HashSet<String> propertiesSet) {
-        if (propertiesSet.contains("%s".formatted(propertyA.toUpperCase()))
-                && propertiesSet.contains("%s".formatted(propertyB.toUpperCase()))) {
-            System.out.printf("The request contains mutually exclusive properties: [%s, %s]\n", propertyA, propertyB);
-            System.out.println("There are no numbers with these properties.");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private static boolean isMutuallyExclusiveProperties(String minus, HashSet<String> propertiesSet) {
+    private static boolean isMutuallyExclusiveProperties(boolean minus, HashSet<String> propertiesSet) {
         return isMutuallyExclusiveProperties(minus, Property.ODD.name(), Property.EVEN.name(), propertiesSet)
                 || isMutuallyExclusiveProperties(minus, Property.DUCK.name(), Property.SPY.name(), propertiesSet)
                 || isMutuallyExclusiveProperties(minus, Property.SUNNY.name(), Property.SQUARE.name(), propertiesSet)
                 || isMutuallyExclusiveProperties(minus, Property.HAPPY.name(), Property.SAD.name(), propertiesSet);
     }
 
-    private static boolean isMutuallyExclusiveProperties(String minus, String propertyA, String propertyB, HashSet<String> propertiesSet) {
-        if (propertiesSet.contains("%s%s".formatted(minus, propertyA.toUpperCase()))
-                && propertiesSet.contains("%s%s".formatted(minus, propertyB.toUpperCase()))) {
-            System.out.printf("The request contains mutually exclusive properties: [%s%s, %s%s]\n", minus, propertyA, minus, propertyB);
+    private static boolean isMutuallyExclusiveProperties(boolean minus, String propertyA, String propertyB, HashSet<String> propertiesSet) {
+        String minusString = minus ? "-" : "";
+        if (propertiesSet.contains("%s%s".formatted(minusString, propertyA.toUpperCase()))
+                && propertiesSet.contains("%s%s".formatted(minusString, propertyB.toUpperCase()))) {
+            System.out.printf("The request contains mutually exclusive properties: [%s%s, %s%s]\n", minusString, propertyA, minusString, propertyB);
             System.out.println("There are no numbers with these properties.");
             return true;
         } else {
