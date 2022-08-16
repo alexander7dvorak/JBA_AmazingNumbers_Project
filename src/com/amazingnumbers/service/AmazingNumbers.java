@@ -1,16 +1,13 @@
 package com.amazingnumbers.service;
 
 import com.amazingnumbers.model.NumberProperties;
-import com.amazingnumbers.model.Property;
+import com.amazingnumbers.util.Stopper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 @Service
@@ -29,12 +26,12 @@ public class AmazingNumbers {
                     - enter 0 to exit.
                     """;
     private static final Scanner scanner = new Scanner(System.in);
-    private static long inputNumber = 1;
+    private static long firstInputNumber = 1;
 
     @PostConstruct
     public static void run() {
         printWelcomeInfo();
-        while (inputNumber != 0) {
+        while (firstInputNumber != 0) {
             printUserPrompt();
         }
     }
@@ -54,20 +51,19 @@ public class AmazingNumbers {
     private static void processUserPrompt(String input) {
         StringTokenizer st = new StringTokenizer(input, " ");
         final int numberOfTokens = st.countTokens();
-        int secondInputNumber;
+        long secondInputNumber;
         try {
             if (numberOfTokens == 0) {
-                System.out.println("The first parameter should be a natural number or zero.");
-                System.out.println();
+                Stopper.printWrongFirstParameter();
             } else if (numberOfTokens == 1) {
-                inputNumber = Long.parseLong(st.nextToken());
-                printInfo(inputNumber);
+                firstInputNumber = Long.parseLong(st.nextToken());
+                printInfo(firstInputNumber);
             } else if (numberOfTokens == 2) {
-                inputNumber = Long.parseLong(st.nextToken());
+                firstInputNumber = Long.parseLong(st.nextToken());
                 secondInputNumber = Integer.parseInt(st.nextToken());
-                printInfo(inputNumber, secondInputNumber, new String[]{});
+                printInfo(firstInputNumber, secondInputNumber, new String[]{});
             } else {
-                inputNumber = Long.parseLong(st.nextToken());
+                firstInputNumber = Long.parseLong(st.nextToken());
                 secondInputNumber = Integer.parseInt(st.nextToken());
                 String[] properties = new String[numberOfTokens - 2];
                 int counter = 0;
@@ -75,39 +71,38 @@ public class AmazingNumbers {
                     properties[counter++] = st.nextToken().toUpperCase();
                 }
                 properties = new HashSet<>(Arrays.asList(properties)).toArray(new String[0]);
-                printInfo(inputNumber, secondInputNumber, properties);
+                printInfo(firstInputNumber, secondInputNumber, properties);
             }
         } catch (NumberFormatException e) {
-            System.out.println("First and second parameters should be natural numbers or zeros.");
-            System.out.println();
-        }
-    }
-
-    private static void printInfo(long number) {
-        if (number == 0) {
-            System.out.println("Goodbye!");
-        } else if (number < 0) {
-            System.out.println("The first parameter should be a natural number or zero.");
-        } else {
-            System.out.println(new NumberProperties(number));
+            Stopper.printWrongRequestFormat();
         }
         System.out.println();
     }
 
-    private static void printInfo(long number, int n, String[] properties) {
-        if (abort(properties)) {
+    private static void printInfo(long number) {
+        if (number == 0) {
+            Stopper.printGoodbye();
+        } else if (number < 0) {
+            Stopper.printWrongFirstParameter();
+        } else {
+            System.out.println(new NumberProperties(number));
+        }
+    }
+
+    private static void printInfo(long firstNumber, long secondNumber, String[] properties) {
+        if (Stopper.isStop(properties)) {
             return;
         }
 
-        if (n < 1) {
-            System.out.println("The Second parameter should be a natural number.");
+        if (secondNumber < 1) {
+            Stopper.printWrongSecondParameter();
         } else {
-            if (number == 0) {
-                System.out.println("Goodbye!");
-            } else if (number < 0) {
-                System.out.println("The first parameter should be a natural number or zero.");
+            if (firstNumber == 0) {
+                Stopper.printGoodbye();
+            } else if (firstNumber < 0) {
+                Stopper.printWrongFirstParameter();
             } else {
-                for (long i = number, j = number; i < number + n; j++) {
+                for (long i = firstNumber, j = firstNumber; i < firstNumber + secondNumber; j++) {
                     String output = new NumberProperties(j).toShortString(properties);
                     if (output.length() > 0) {
                         System.out.println(output);
@@ -116,77 +111,5 @@ public class AmazingNumbers {
                 }
             }
         }
-        System.out.println();
-    }
-
-    private static boolean abort(String[] properties) {
-        if (abortDueToWrongProperties(properties) || abortDueToMutuallyExclusiveProperties(properties)) {
-            System.out.printf("Available properties: %s\n", Arrays.toString(Property.values()));
-            System.out.println();
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean abortDueToWrongProperties(String[] properties) {
-        List<String> wrongProperties = new ArrayList<>();
-        addWrongProperties(properties, wrongProperties);
-        if (wrongProperties.size() > 1) {
-            System.out.print("The properties [");
-            System.out.print(wrongProperties.get(0));
-            for (int i = 1; i < wrongProperties.size(); i++) {
-                System.out.print(", " + wrongProperties.get(i));
-            }
-            System.out.println("] are wrong.");
-            return true;
-        } else if (wrongProperties.size() == 1) {
-            System.out.println("The property [" + wrongProperties.get(0) + "] is wrong.");
-            return true;
-        }
-        return false;
-    }
-
-    private static void addWrongProperties(String[] properties, List<String> wrongProperties) {
-        Set<String> rightProperties = new HashSet<>();
-        for (Property p : Property.values()) {
-            rightProperties.add(p.toString());
-            rightProperties.add("-" + p);
-        }
-        for (String property : properties) {
-            if (!rightProperties.contains(property)) {
-                wrongProperties.add(property);
-            }
-        }
-    }
-
-    private static boolean abortDueToMutuallyExclusiveProperties(String[] properties) {
-        HashSet<String> propertiesSet = new HashSet<>(List.of(properties));
-        for (String s : propertiesSet) {
-            if (s.startsWith("-")
-                    && isMutuallyExclusiveProperties(false, s.substring(1), s, propertiesSet)) {
-                return true;
-            }
-        }
-        return isMutuallyExclusiveProperties(false, propertiesSet) ||
-                isMutuallyExclusiveProperties(true, propertiesSet);
-    }
-
-    private static boolean isMutuallyExclusiveProperties(boolean minus, String propertyA, String propertyB, HashSet<String> propertiesSet) {
-        String minusString = minus ? "-" : "";
-        if (propertiesSet.contains("%s%s".formatted(minusString, propertyA.toUpperCase()))
-                && propertiesSet.contains("%s%s".formatted(minusString, propertyB.toUpperCase()))) {
-            System.out.printf("The request contains mutually exclusive properties: [%s%s, %s%s]\n", minusString, propertyA, minusString, propertyB);
-            System.out.println("There are no numbers with these properties.");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private static boolean isMutuallyExclusiveProperties(boolean minus, HashSet<String> propertiesSet) {
-        return isMutuallyExclusiveProperties(minus, Property.ODD.name(), Property.EVEN.name(), propertiesSet)
-                || isMutuallyExclusiveProperties(minus, Property.DUCK.name(), Property.SPY.name(), propertiesSet)
-                || isMutuallyExclusiveProperties(minus, Property.SUNNY.name(), Property.SQUARE.name(), propertiesSet)
-                || isMutuallyExclusiveProperties(minus, Property.HAPPY.name(), Property.SAD.name(), propertiesSet);
     }
 }
