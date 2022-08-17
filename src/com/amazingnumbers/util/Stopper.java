@@ -35,8 +35,7 @@ public class Stopper {
     }
 
     private static boolean isStopDueToWrongProperties(String[] properties) {
-        List<String> wrongProperties = new ArrayList<>();
-        addWrongProperties(properties, wrongProperties);
+        List<String> wrongProperties = wrongProperties(properties);
         if (wrongProperties.size() > 1) {
             System.out.print("The properties [");
             System.out.print(wrongProperties.get(0));
@@ -52,7 +51,8 @@ public class Stopper {
         return false;
     }
 
-    private static void addWrongProperties(String[] properties, List<String> wrongProperties) {
+    private static List<String> wrongProperties(String[] properties) {
+        List<String> wrongProperties = new ArrayList<>();
         Set<String> rightProperties = new HashSet<>();
         for (Property p : Property.values()) {
             rightProperties.add(p.toString());
@@ -63,6 +63,7 @@ public class Stopper {
                 wrongProperties.add(property);
             }
         }
+        return wrongProperties;
     }
 
     private static boolean isStopDueToMutuallyExclusiveProperties(String[] properties) {
